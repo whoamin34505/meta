@@ -2,6 +2,7 @@ from exif import Image
 from datetime import datetime
 from tkinter import filedialog
 import os
+import time
 
 def update_exif_datetime(image_path, output_path):
     with open(image_path, "rb") as file:
@@ -37,6 +38,8 @@ def main():
             input_path = os.path.join(dir_path, file.name).replace("\\", "/")
             file_paths.append(input_path)
     
+    file_paths.sort()
+    
     success_count = 0
     for input_path in file_paths:
         name, ext = os.path.splitext(os.path.basename(input_path))
@@ -46,6 +49,10 @@ def main():
         update_exif_datetime(input_path, output_path)
         print(f"Successfully saved to: {os.path.basename(output_path)}")
         success_count += 1
+        
+        if success_count < len(file_paths):
+            print("Waiting 1 second before next file...")
+            time.sleep(1)
 
 
     print(f"\nComplete! Successfully for {success_count} files.")
